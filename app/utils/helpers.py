@@ -1,14 +1,43 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import os
 import streamlit as st
 
 def send_email(to_email, subject, body):
+    # 1. Try SendGrid First
+    sendgrid_key = os.getenv("SENDGRID_API_KEY")
+    sendgrid_from = os.getenv("SENDGRID_FROM_EMAIL") or os.getenv("SMTP_EMAIL")
+    
+    if sendgrid_key and sendgrid_from:
+        try:
+            message = Mail(
+                from_email=sendgrid_from,
+                to_emails=to_email,
+                subject=subject,
+                plain_text_content=body)
+            sg = SendGridAPIClient(sendgrid_key)
+            response = sg.send(message)
+            print(f"SendGrid Status: {response.status_code}")
+            print(f"SendGrid Body: {response.body}")
+            print(f"SendGrid Headers: {response.headers}")
+            
+            if response.status_code in [200, 201, 202]:
+                return True, "Email sent successfully via SendGrid."
+            else:
+                 print(f"SendGrid Error Code: {response.status_code}")
+                 # Fall through
+        except Exception as e:
+            print(f"SendGrid send failed: {e}")
+            # Fall through
+            
+    # 2. Fallback to Standard SMTP (Works locally, blocked on Railway Free)
     smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
     smtp_port = int(os.getenv("SMTP_PORT", 587))
-    smtp_user = os.getenv("SMTP_EMAIL")
     smtp_password = os.getenv("SMTP_PASSWORD")
+    smtp_user = os.getenv("SMTP_EMAIL")
 
     if not smtp_user or not smtp_password:
         msg = f"MOCK EMAIL TO {to_email}: {body}"
@@ -27,7 +56,7 @@ def send_email(to_email, subject, body):
         server.login(smtp_user, smtp_password)
         server.sendmail(smtp_user, to_email, msg.as_string())
         server.quit()
-        return True, "Email sent successfully."
+        return True, "Email sent successfully via SMTP."
     except Exception as e:
         error_msg = f"Failed to send email: {e}"
         print(error_msg)

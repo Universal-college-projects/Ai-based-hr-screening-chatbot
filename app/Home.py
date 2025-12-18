@@ -1,7 +1,18 @@
 import streamlit as st
 import time
 from utils.db_connector import SnowflakeConnector
+
+from dotenv import load_dotenv
+import os
+
+# Load .env from parent directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+env_path = os.path.join(parent_dir, '.env')
+load_dotenv(env_path)
+
 from utils.helpers import logout_button, hide_sidebar
+
 
 hide_sidebar()
 

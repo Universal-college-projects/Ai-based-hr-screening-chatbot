@@ -7,6 +7,7 @@ import datetime
 from utils.db_connector import SnowflakeConnector
 from utils.ats_engine import ATSEngine
 from utils.helpers import send_email, logout_button, hide_sidebar
+import os
 
 # Configure Logging
 logging.basicConfig(level=logging.INFO)
@@ -118,7 +119,8 @@ def render_application_step():
                         st.info("You have already been shortlisted for this position.")
                         
                         # Resend Email Logic
-                        link = f"http://localhost:8501/Candidate_Application?token={candidate_id}" 
+                        base_url = os.getenv("BASE_URL", "http://localhost:8501")
+                        link = f"{base_url}/Candidate_Application?token={candidate_id}" 
                         email_success, email_msg = send_email(email, "Assessment Invitation (Resent)", f"Here is your assessment link again: {link}")
                         
                         if email_success:
@@ -162,7 +164,8 @@ def render_application_step():
                     if ats_pass:
                         st.success("Application Submitted Successfully!")
                         # Send Email with Token Link
-                        link = f"http://localhost:8501/Candidate_Application?token={c_id}" 
+                        base_url = os.getenv("BASE_URL", "http://localhost:8501")
+                        link = f"{base_url}/Candidate_Application?token={c_id}" 
                         
                         email_success, email_msg = send_email(email, "Assessment Invitation", f"Congratulations! You have been shortlisted. Please start your assessment using this secure link: {link}")
                         

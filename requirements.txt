@@ -10,3 +10,4 @@ numpy
 google-generativeai
 watchdog
 openpyxl
+sendgrid
