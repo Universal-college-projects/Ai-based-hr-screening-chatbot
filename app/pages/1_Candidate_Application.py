@@ -119,7 +119,7 @@ def render_application_step():
                         st.info("You have already been shortlisted for this position.")
                         
                         # Resend Email Logic
-                        base_url = os.getenv("BASE_URL", "http://localhost:8501")
+                        base_url = os.getenv("BASE_URL", "https://ai-based-hr-screening-chatbot-production.up.railway.app/")
                         link = f"{base_url}/Candidate_Application?token={candidate_id}" 
                         email_success, email_msg = send_email(email, "Assessment Invitation (Resent)", f"Here is your assessment link again: {link}")
                         
