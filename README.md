@@ -175,6 +175,7 @@ Backend: Python (NLP for ATS scoring)
 Database / DW: Snowflake  
 Cloud: Azure (App Service, Blob Storage, Key Vault, Azure Function for email sending)  
 Visualization: Power BI  
+Software Tool Used:SendGrid
 
 ## Project Descriptiion
 - Admin page has JD, After the candidate fills the application and the application questions consists of :(name, email, gender, ph no, city, state, country, pincode, address, applied role, work experience, languages known, highest level of education, name of university, feild of study, year of graduation, skills, resume url,CTC expected, why this company, do you have the work permit of the applied country, do you in future require any help from the company for visa permit) and then the application is submitted and the ats scoring takes place based on the keyword matching and if the ats score is equal or higher than what we set teh candidate will be get the assessment link through mail ----> python+streamlit--> stored in snowflake
