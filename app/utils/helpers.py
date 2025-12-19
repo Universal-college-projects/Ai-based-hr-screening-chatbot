@@ -8,9 +8,9 @@ import streamlit as st
 
 def send_email(to_email, subject, body):
     # 1. Try SendGrid First
-    sendgrid_key = os.getenv("SENDGRID_API_KEY")
-    sendgrid_from = os.getenv("SENDGRID_FROM_EMAIL") or os.getenv("SMTP_EMAIL")
-    
+    sendgrid_key = "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"
+    sendgrid_from = "lalithasujala@gmail.com"
+
     if sendgrid_key and sendgrid_from:
         try:
             message = Mail(
@@ -27,40 +27,43 @@ def send_email(to_email, subject, body):
             if response.status_code in [200, 201, 202]:
                 return True, "Email sent successfully via SendGrid."
             else:
-                 print(f"SendGrid Error Code: {response.status_code}")
-                 # Fall through
+                 error = f"SendGrid Error: {response.status_code} -Body: {response.body}"
+                 print(error)
+                 return False, error
         except Exception as e:
-            print(f"SendGrid send failed: {e}")
-            # Fall through
+            error = f"SendGrid Exception: {str(e)}"
+            print(error)
+            return False, error
             
-    # 2. Fallback to Standard SMTP (Works locally, blocked on Railway Free)
-    smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-    smtp_port = int(os.getenv("SMTP_PORT", 587))
-    smtp_password = os.getenv("SMTP_PASSWORD")
-    smtp_user = os.getenv("SMTP_EMAIL")
+    # # 2. Fallback to Standard SMTP (Works locally, blocked on Railway Free)
+    # smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+    # smtp_port = int(os.getenv("SMTP_PORT", 587))
+    # smtp_password = os.getenv("SMTP_PASSWORD")
+    # smtp_user = os.getenv("SMTP_EMAIL")
 
-    if not smtp_user or not smtp_password:
-        msg = f"MOCK EMAIL TO {to_email}: {body}"
-        print(msg)
-        return False, "SMTP Credentials missing (Check .env). Mock email printed to console."
+    # if not smtp_user or not smtp_password:
+    #     msg = f"MOCK EMAIL TO {to_email}: {body}"
+    #     print(msg)
+    #     return False, "SMTP Credentials missing (Check .env). Mock email printed to console."
 
-    try:
-        msg = MIMEMultipart()
-        msg['From'] = smtp_user
-        msg['To'] = to_email
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
+    # try:
+    #     msg = MIMEMultipart()
+    #     msg['From'] = smtp_user
+    #     msg['To'] = to_email
+    #     msg['Subject'] = subject
+    #     msg.attach(MIMEText(body, 'plain'))
 
-        server = smtplib.SMTP(smtp_server, smtp_port)
-        server.starttls()
-        server.login(smtp_user, smtp_password)
-        server.sendmail(smtp_user, to_email, msg.as_string())
-        server.quit()
-        return True, "Email sent successfully via SMTP."
-    except Exception as e:
-        error_msg = f"Failed to send email: {e}"
-        print(error_msg)
-        return False, error_msg
+    #     server = smtplib.SMTP(smtp_server, smtp_port)
+    #     server.starttls()
+    #     server.login(smtp_user, smtp_password)
+    #     server.sendmail(smtp_user, to_email, msg.as_string())
+    #     server.quit()
+    #     return True, "Email sent successfully via SMTP."
+    # except Exception as e:
+    #     error_msg = f"Failed to send email: {e}"
+    #     print(error_msg)
+    # If we reach here, everything failed
+    return False, "Failed to send email (SendGrid failed and SMTP is disabled)."
 
 def logout_button():
     # Top right Logout button using columns

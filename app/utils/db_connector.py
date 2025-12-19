@@ -5,6 +5,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Fix/Ensure .env is loaded from project root
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(os.path.dirname(current_dir))
+env_path = os.path.join(project_root, '.env')
+load_dotenv(env_path)
+
 class SnowflakeConnector:
     def __init__(self):
         self.user = os.getenv("SNOWFLAKE_USER")
@@ -13,6 +19,14 @@ class SnowflakeConnector:
         self.warehouse = os.getenv("SNOWFLAKE_WAREHOUSE")
         self.database = os.getenv("SNOWFLAKE_DATABASE")
         self.schema = os.getenv("SNOWFLAKE_SCHEMA")
+        
+        # Debug Check
+        if not self.user or not self.account:
+             print("DEBUG: Snowflake Env Vars MISSING!")
+             print(f"Loading env from: {env_path}")
+             print(f"User: {self.user}, Account: {self.account}")
+             print(f"Current CWD: {os.getcwd()}")
+
 
     def get_connection(self):
         try:
