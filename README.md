@@ -160,20 +160,13 @@ Recruiters review only the shortlisted profiles.
            +-----------------------------+
 
 
-### Cloud Components (Azure)
-- Azure App Service / Container Apps: Deploy Streamlit and backend  
-- Azure Blob Storage: Store resumes (PDF)  
-- Azure Key Vault: Store Snowflake credentials  
-- Azure Function / SendGrid: Email assessment link  
-
 ---
 
 ## Tech Stack
 
 Frontend: Streamlit, HTML, CSS
 Backend: Python (NLP for ATS scoring)  
-Database / DW: Snowflake  
-Cloud: Azure (App Service, Blob Storage, Key Vault, Azure Function for email sending)  
+Database / DW: Snowflake    
 Visualization: Power BI  
 Software Tool Used:SendGrid
 
