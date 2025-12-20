@@ -9,7 +9,7 @@ This document acts as a complete blueprint to reconstruct the **HR Screening Sys
 *   **Frontend**: Streamlit
 *   **Database**: Snowflake
 *   **AI**: Google Gemini Pro (Generative AI)
-*   **Email**: SMTP (Gmail)
+*   **Email**: SendGrid (Gmail)
 *   **Key Libraries**: `snowflake-connector-python`, `pandas`, `scikit-learn`, `PyPDF2`, `google-generativeai`.
 
 ---
@@ -87,16 +87,6 @@ SNOWFLAKE_WAREHOUSE=COMPUTE_WH
 SNOWFLAKE_DATABASE=HR_DB
 SNOWFLAKE_SCHEMA=PUBLIC
 
-# --- Email (SMTP) ---
-# Note: For Gmail, use an App Password (requires 2FA enabled on Google Account)
-SMTP_SERVER=smtp.gmail.com
-SMTP_PORT=587
-SMTP_EMAIL=your_email@gmail.com
-SMTP_PASSWORD=your_google_app_password
-
-# --- AI (Google Gemini) ---
-GOOGLE_API_KEY=your_gemini_api_key
-```
 
 ---
 
